@@ -37,7 +37,7 @@ export default function TabLayout() {
         options={{
           title: '피팅룸',
           tabBarIcon: ({ color, size }) => (
-            <Icon name="door.sliding.left.hand.open" size={size} color={color} />
+            <Icon name="camera" size={size} color={color} />
           ),
         }}
       />
