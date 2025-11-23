@@ -42,7 +42,7 @@ export default function PhotoPreview() {
         <View className="px-6 pb-8 pt-4 flex-row gap-4">
           <Pressable
             onPress={handleRetake}
-            className="flex-1 bg-transparent border-2 border-gray-700 active:bg-gray-900 py-6 rounded-2xl"
+            className="flex-1 h-[58px] bg-transparent border-2 border-gray-700 active:bg-gray-900 rounded-[13px]"
           >
             <View className="flex-row items-center justify-center gap-2">
               <RotateCcw className="text-white" size={20} color="#ffffff" />
@@ -52,8 +52,7 @@ export default function PhotoPreview() {
           
           <Button
             onPress={handleAnalyze}
-            className="flex-1 bg-purple-600 active:bg-purple-700 py-6 rounded-2xl"
-            size="lg"
+            className="flex-1 h-[58px] bg-purple-600 active:bg-purple-700 rounded-[13px]"
           >
             <Text className="text-white font-medium text-base">분석 시작</Text>
           </Button>

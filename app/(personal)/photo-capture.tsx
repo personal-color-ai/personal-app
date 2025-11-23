@@ -55,7 +55,7 @@ export default function PhotoCapture() {
           </Text>
           <Button
             onPress={requestPermission}
-            className="bg-purple-600 active:bg-purple-700 py-4 px-8 rounded-2xl"
+            className="h-[58px] bg-purple-600 active:bg-purple-700 px-8 rounded-[13px]"
           >
             <Text className="text-white font-medium">카메라 권한 허용</Text>
           </Button>
@@ -99,8 +99,7 @@ export default function PhotoCapture() {
           <View className="px-6 mb-4 mt-6">
             <Button
               onPress={handleTakePhoto}
-              className="w-full bg-white active:bg-gray-100 py-6 rounded-2xl"
-              size="lg"
+              className="w-full h-[58px] bg-white active:bg-gray-100 rounded-[13px]"
             >
               <View className="flex-row items-center justify-center gap-2">
                 <Camera className="text-black" size={20} color="#000000" />
@@ -118,7 +117,7 @@ export default function PhotoCapture() {
           <View className="px-6 mb-6">
             <Pressable
               onPress={handleSelectFromGallery}
-              className="w-full bg-transparent border-2 border-gray-700 active:bg-gray-900 py-6 rounded-2xl"
+              className="w-full h-[58px] bg-transparent border-2 border-gray-700 active:bg-gray-900 rounded-[13px]"
             >
               <View className="flex-row items-center justify-center gap-2">
                 <Upload className="text-white" size={20} color="#ffffff" />

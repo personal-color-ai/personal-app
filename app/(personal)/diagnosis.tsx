@@ -140,8 +140,7 @@ export default function PhotoGuide() {
           <View className="px-6">
             <Button
               onPress={handleConfirm}
-              className="w-full bg-purple-600 active:bg-purple-700 py-4 rounded-2xl"
-              size="lg"
+              className="w-full h-[58px] bg-purple-600 active:bg-purple-700 rounded-[13px]"
             >
               <Text className="text-white font-bold text-lg">가이드를 확인했어요</Text>
             </Button>
