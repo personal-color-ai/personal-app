@@ -24,7 +24,7 @@ export default function HomeScreen() {
             </Text>
           </View>
           <Pressable>
-            <Icon name="person.crop.circle" size={24} className="text-[#0F0F0F]" />
+            <Icon name="person.circle" size={24} className="text-[#0F0F0F]" />
           </Pressable>
         </View>
       </View>
@@ -52,7 +52,7 @@ export default function HomeScreen() {
           <View className="flex-row">
             {/* Icon */}
             <View className="mr-4 h-[43px] w-[43px] items-center justify-center rounded-full bg-orange-100">
-              <Icon name="sparkles" size={24} className="text-orange-600" />
+              <Icon name="sparkle" size={24} className="text-orange-600" />
             </View>
 
             {/* Content */}
