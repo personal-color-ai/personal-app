@@ -13,8 +13,7 @@ export default function PhotoGuide() {
 
   const handleConfirm = () => {
     console.log("가이드 확인 완료");
-    // Navigate back or to next step
-    // router.back(); 
+    router.push('/photo-capture');
   };
 
   return (
