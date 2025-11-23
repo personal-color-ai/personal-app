@@ -1,4 +1,4 @@
-import { CheckCircle2, XCircle, Camera, ArrowLeft, Sun, Smile } from "lucide-react-native";
+import { CheckCircle2, XCircle, Camera, Sun, Smile } from "lucide-react-native";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import { Button } from "@/components/nativewindui/Button";
 import { View, Text, ScrollView, Pressable } from "react-native";
@@ -21,31 +21,6 @@ export default function PhotoGuide() {
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="flex-1">
         <View className="max-w-md mx-auto min-h-screen bg-white pb-10">
-          {/* 헤더 */}
-          <View className="bg-white border-b border-gray-100 p-4">
-            <View className="flex-row items-center justify-center relative">
-              <Pressable onPress={() => router.back()} className="absolute left-0 p-2">
-                <ArrowLeft className="text-black" size={24} color="black" />
-              </Pressable>
-              <Text className="text-center text-lg font-bold">퍼스널 컬러 진단 가이드</Text>
-            </View>
-          </View>
-
-          {/* 진행 단계 */}
-          <View className="flex-row items-center justify-center gap-4 py-6">
-            <View className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center">
-              <Text className="text-white font-bold">1</Text>
-            </View>
-            <View className="w-16 h-0.5 bg-gray-200"></View>
-            <View className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-              <Text className="text-gray-400 font-bold">2</Text>
-            </View>
-            <View className="w-16 h-0.5 bg-gray-200"></View>
-            <View className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-              <Text className="text-gray-400 font-bold">3</Text>
-            </View>
-          </View>
-
           {/* 카메라 아이콘 */}
           <View className="flex-row justify-center py-4">
             <View className="w-20 h-20 rounded-full bg-purple-100 flex items-center justify-center">

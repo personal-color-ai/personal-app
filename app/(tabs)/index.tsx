@@ -3,9 +3,17 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/nativewindui/Icon';
 import { Text } from '@/components/nativewindui/Text';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+
+  const router = useRouter();
+
+  const handleDiagnosis = () => {
+    // go to diagnosis screen
+    router.push('/diagnosis');
+  };
 
   return (
     <ScrollView
@@ -38,7 +46,7 @@ export default function HomeScreen() {
 
       {/* Main Action Button */}
       <View className="mt-8 px-[29px]">
-        <Pressable className="h-[58px] flex-row items-center justify-center gap-2 rounded-[13px] bg-[#9810FA]">
+        <Pressable onPress={handleDiagnosis} className="h-[58px] flex-row items-center justify-center gap-2 rounded-[13px] bg-[#9810FA]">
           <Icon name="paintpalette" size={22} className="text-white" />
           <Text className="text-[18px] font-medium text-white">내 퍼스널 컬러 진단받기</Text>
         </Pressable>
