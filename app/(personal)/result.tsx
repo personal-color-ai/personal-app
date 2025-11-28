@@ -1,5 +1,4 @@
 import { View, Text, ScrollView, Pressable, Image } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Check } from 'lucide-react-native';
 import { useState } from 'react';
@@ -10,7 +9,7 @@ export default function Result() {
   const [selectedTab, setSelectedTab] = useState('overview');
 
   return (
-    <SafeAreaView className="flex-1 bg-neutral-50">
+    <View className="flex-1 bg-neutral-50">
       <ScrollView className="flex-1">
         <View className="pb-10">
           {/* 퍼스널 컬러 팔레트 섹션 */}
@@ -166,6 +165,6 @@ export default function Result() {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
