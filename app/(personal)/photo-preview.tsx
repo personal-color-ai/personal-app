@@ -15,7 +15,10 @@ export default function PhotoPreview() {
 
   const handleAnalyze = () => {
     console.log('분석 시작');
-    // TODO: Navigate to analysis/result screen
+    router.push({
+      pathname: '/(personal)/result',
+      params: { photoUri: photoUri || 'placeholder' },
+    });
   };
 
   return (
