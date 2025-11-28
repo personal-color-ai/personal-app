@@ -2,16 +2,24 @@ import { RotateCcw } from 'lucide-react-native';
 import { Button } from '@/components/nativewindui/Button';
 import { View, Text, Image, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
+import { useRouter, useLocalSearchParams, useNavigation } from 'expo-router';
+import { useState, useEffect } from 'react';
 import { getPersonalColorReport } from '@/lib/api/reportService';
 import { ReportResult } from '@/types/api';
 import AnalysisLoading from '@/components/AnalysisLoading';
 
 export default function PhotoPreview() {
   const router = useRouter();
+  const navigation = useNavigation();
   const { photoUri } = useLocalSearchParams<{ photoUri: string }>();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  // 분석 중일 때 헤더 숨기기
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: !isAnalyzing,
+    });
+  }, [isAnalyzing, navigation]);
 
   const handleRetake = () => {
     console.log('다시 촬영');
@@ -53,7 +61,7 @@ export default function PhotoPreview() {
     }
   };
 
-  // 분석 중일 때 로딩 화면 표시
+  // 분석 중일 때 로딩 화면 표시 (헤더 없이)
   if (isAnalyzing) {
     return <AnalysisLoading />;
   }

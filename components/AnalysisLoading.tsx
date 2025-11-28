@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { useState, useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -8,44 +8,55 @@ export default function AnalysisLoading() {
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          return 100;
+        if (prev >= 95) {
+          // 95% 이상에서는 천천히
+          return Math.min(prev + 0.2, 99);
+        } else if (prev >= 70) {
+          // 70-95%는 조금 느리게
+          return prev + 0.5;
+        } else {
+          // 70% 까지는 빠르게
+          return prev + 1;
         }
-        return prev + 1;
       });
-    }, 30);
+    }, 100);
 
     return () => clearInterval(interval);
   }, []);
 
-  const progressWidth = `${progress}%`;
-
   return (
     <LinearGradient
       colors={['#3d2b6b', '#2d1f54', '#1e1644']}
+      style={{ flex: 1 }}
       className="flex-1 items-center justify-center">
-      <View className="items-center">
+      <View className="items-center pb-[80px] pt-[80px]">
         <Text className="text-[26px] font-semibold text-white">AI 분석 진행 중</Text>
         <Text className="mt-[36px] text-[16px] font-medium text-[#bfb6d9]">
           잠시만 기다려주세요...
         </Text>
 
-        {/* 이미지 플레이스홀더 */}
-        <View className="mt-[78px] h-[188px] w-[152px] items-center justify-center rounded-[20px] bg-[#4c3996]/30">
-          <Text className="text-[48px]">🎨</Text>
+        {/* 로고 이미지 */}
+        <View className="mt-[120px] items-center justify-center">
+          <Image
+            source={require('../assets/logo.png')}
+            style={{ width: 152, height: 152 }}
+            resizeMode="contain"
+          />
         </View>
 
         {/* 진행도 */}
         <View className="mt-[111px] w-[325px]">
           <View className="mb-[10px] flex-row items-center justify-between">
             <Text className="text-[18px] font-medium text-white">분석 진행도</Text>
-            <Text className="text-[18px] font-medium text-white">{progress}%</Text>
+            <Text className="text-[18px] font-medium text-white">{Math.floor(progress)}%</Text>
           </View>
 
           {/* 프로그레스 바 */}
           <View className="h-[8px] w-full overflow-hidden rounded-[20px] bg-[#030213]">
-            <View className="h-full rounded-[20px] bg-[#9810fa]" style={{ width: progressWidth }} />
+            <View
+              className="h-full rounded-[20px] bg-[#9810fa]"
+              style={{ width: `${progress}%` }}
+            />
           </View>
         </View>
 

@@ -7,7 +7,7 @@ const API_BASE_URL = Constants.expoConfig?.extra?.apiBaseUrl || 'http://168.107.
 // axios 인스턴스 생성
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 30000, // 30초 타임아웃
+  timeout: 300000, // 30초 타임아웃
   headers: {
     'Content-Type': 'multipart/form-data',
   },

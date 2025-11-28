@@ -1,4 +1,4 @@
-import { View, ScrollView, Pressable } from 'react-native';
+import { View, ScrollView, Pressable, Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/nativewindui/Icon';
@@ -39,14 +39,14 @@ export default function HomeScreen() {
 
       {/* Illustration - Placeholder */}
       <View className="mt-8 items-center justify-center px-[78px]">
-        <View className="h-[276px] w-[223px] items-center justify-center rounded-full bg-purple-100">
-          <Icon name="person.fill" size={120} className="text-purple-400" />
-        </View>
+        <Image source={require('../../assets/logo.png')} />
       </View>
 
       {/* Main Action Button */}
       <View className="mt-8 px-[29px]">
-        <Pressable onPress={handleDiagnosis} className="h-[58px] flex-row items-center justify-center gap-2 rounded-[13px] bg-[#9810FA]">
+        <Pressable
+          onPress={handleDiagnosis}
+          className="h-[58px] flex-row items-center justify-center gap-2 rounded-[13px] bg-[#9810FA]">
           <Icon name="paintpalette" size={22} className="text-white" />
           <Text className="text-[18px] font-medium text-white">내 퍼스널 컬러 진단받기</Text>
         </Pressable>
