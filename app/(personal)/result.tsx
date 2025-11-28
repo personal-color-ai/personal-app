@@ -110,59 +110,125 @@ export default function Result() {
             </View>
           </View>
 
-          {/* 결과 카드 */}
-          <View className="mt-[18px] px-[30px]">
-            <View className="rounded-[12px] border border-[#fee685] bg-[#fff9ed] p-[20px]">
-              <View className="flex-row items-center gap-[16px]">
-                {/* 컬러 원 */}
-                <View className="relative h-[60px] w-[60px]">
-                  <View className="h-[60px] w-[60px] rounded-full bg-[#f2c296]" />
-                  <View className="absolute left-[11px] top-[7px] h-[53px] w-[39px] rounded-full bg-[#d4a574]" />
+          {/* 탭 컨텐츠 */}
+          {selectedTab === 'fashion' ? (
+            /* 패션 스타일링 */
+            <View className="mt-[18px] px-[30px]">
+              <View className="rounded-[12px] border border-neutral-200 bg-white p-[20px]">
+                <Text className="mb-[20px] text-[18px] font-semibold text-black">
+                  패션 스타일링
+                </Text>
+
+                {/* 추천 소재 */}
+                <Text className="mb-[12px] text-[16px] font-semibold text-black">추천 소재</Text>
+                <View className="mb-[28px] flex-row flex-wrap gap-[10px]">
+                  <View className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
+                    <Text className="text-[14px] font-semibold text-[#383745]">코튼</Text>
+                  </View>
+                  <View className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
+                    <Text className="text-[14px] font-semibold text-[#383745]">린넨</Text>
+                  </View>
+                  <View className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
+                    <Text className="text-[14px] font-semibold text-[#383745]">스웨이드</Text>
+                  </View>
+                  <View className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
+                    <Text className="text-[14px] font-semibold text-[#383745]">니트</Text>
+                  </View>
                 </View>
 
-                {/* 텍스트 */}
-                <View className="flex-1">
-                  <Text className="mb-[8px] text-[20px] font-medium text-black">가을 웜뮤트</Text>
-                  <View className="flex-row gap-[12px]">
-                    <View className="flex-row items-center gap-[5px]">
-                      <Text className="text-[16px] font-medium text-[#4a5565]">명도</Text>
-                      <View className="rounded-[5px] bg-[#fef3c6] px-[9px] py-[2px]">
-                        <Text className="text-[14px] font-medium text-[#973b00]">medium</Text>
-                      </View>
+                {/* 추천 패턴 */}
+                <Text className="mb-[12px] text-[16px] font-semibold text-black">추천 패턴</Text>
+                <View className="mb-[28px] flex-row flex-wrap gap-[10px]">
+                  <View className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
+                    <Text className="text-[14px] font-semibold text-[#383745]">체크</Text>
+                  </View>
+                  <View className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
+                    <Text className="text-[14px] font-semibold text-[#383745]">페이즐리</Text>
+                  </View>
+                  <View className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
+                    <Text className="text-[14px] font-semibold text-[#383745]">스트라이프</Text>
+                  </View>
+                </View>
+
+                {/* 대비감 */}
+                <Text className="mb-[12px] text-[16px] font-semibold text-black">대비감</Text>
+                <Text className="text-[16px] font-medium text-[#4a5565]">
+                  톤온톤으로 부드럽게 연결되는 코디가 잘 어울려요
+                </Text>
+              </View>
+            </View>
+          ) : selectedTab === 'beauty' ? (
+            /* 뷰티 */
+            <View className="px-[22px]">
+              <View className="h-[292px] w-full overflow-hidden">
+                {photoUri ? (
+                  <Image source={{ uri: photoUri }} className="h-full w-full" resizeMode="cover" />
+                ) : (
+                  <View className="h-full w-full items-center justify-center bg-gray-200">
+                    <Text className="text-gray-500">뷰티 이미지</Text>
+                  </View>
+                )}
+              </View>
+            </View>
+          ) : (
+            <>
+              {/* 결과 카드 */}
+              <View className="mt-[18px] px-[30px]">
+                <View className="rounded-[12px] border border-[#fee685] bg-[#fff9ed] p-[20px]">
+                  <View className="flex-row items-center gap-[16px]">
+                    {/* 컬러 원 */}
+                    <View className="relative h-[60px] w-[60px]">
+                      <View className="h-[60px] w-[60px] rounded-full bg-[#f2c296]" />
+                      <View className="absolute left-[11px] top-[7px] h-[53px] w-[39px] rounded-full bg-[#d4a574]" />
                     </View>
-                    <View className="flex-row items-center gap-[5px]">
-                      <Text className="text-[16px] font-medium text-[#4a5565]">채도</Text>
-                      <View className="rounded-[5px] bg-[#fef3c6] px-[9px] py-[2px]">
-                        <Text className="text-[14px] font-medium text-[#973b00]">muted</Text>
+
+                    {/* 텍스트 */}
+                    <View className="flex-1">
+                      <Text className="mb-[8px] text-[20px] font-medium text-black">
+                        가을 웜뮤트
+                      </Text>
+                      <View className="flex-row gap-[12px]">
+                        <View className="flex-row items-center gap-[5px]">
+                          <Text className="text-[16px] font-medium text-[#4a5565]">명도</Text>
+                          <View className="rounded-[5px] bg-[#fef3c6] px-[9px] py-[2px]">
+                            <Text className="text-[14px] font-medium text-[#973b00]">medium</Text>
+                          </View>
+                        </View>
+                        <View className="flex-row items-center gap-[5px]">
+                          <Text className="text-[16px] font-medium text-[#4a5565]">채도</Text>
+                          <View className="rounded-[5px] bg-[#fef3c6] px-[9px] py-[2px]">
+                            <Text className="text-[14px] font-medium text-[#973b00]">muted</Text>
+                          </View>
+                        </View>
                       </View>
                     </View>
                   </View>
                 </View>
               </View>
-            </View>
-          </View>
 
-          {/* 주요 특징 */}
-          <View className="mt-[18px] px-[30px]">
-            <View className="rounded-[12px] border border-neutral-200 bg-white p-[20px]">
-              <Text className="mb-[16px] text-[18px] font-semibold text-black">주요 특징</Text>
-              <View className="gap-[9px]">
-                {[
-                  '따뜻한 언더톤의 피부',
-                  '따뜻한 언더톤의 피부',
-                  '따뜻한 언더톤의 피부',
-                  '따뜻한 언더톤의 피부',
-                ].map((text, index) => (
-                  <View key={index} className="flex-row items-center gap-[8px]">
-                    <View className="h-[19px] w-[19px] items-center justify-center rounded-full bg-[#9810fa]">
-                      <View className="h-[10px] w-[10px] rounded-full bg-white" />
-                    </View>
-                    <Text className="text-[16px] font-medium text-[#475161]">{text}</Text>
+              {/* 주요 특징 */}
+              <View className="mt-[18px] px-[30px]">
+                <View className="rounded-[12px] border border-neutral-200 bg-white p-[20px]">
+                  <Text className="mb-[16px] text-[18px] font-semibold text-black">주요 특징</Text>
+                  <View className="gap-[9px]">
+                    {[
+                      '따뜻한 언더톤의 피부',
+                      '따뜻한 언더톤의 피부',
+                      '따뜻한 언더톤의 피부',
+                      '따뜻한 언더톤의 피부',
+                    ].map((text, index) => (
+                      <View key={index} className="flex-row items-center gap-[8px]">
+                        <View className="h-[19px] w-[19px] items-center justify-center rounded-full bg-[#9810fa]">
+                          <View className="h-[10px] w-[10px] rounded-full bg-white" />
+                        </View>
+                        <Text className="text-[16px] font-medium text-[#475161]">{text}</Text>
+                      </View>
+                    ))}
                   </View>
-                ))}
+                </View>
               </View>
-            </View>
-          </View>
+            </>
+          )}
         </View>
       </ScrollView>
     </View>
