@@ -37,6 +37,9 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
+    },
+    "extra": {
+      "apiBaseUrl": "http://168.107.53.130:8080"
     }
   }
 }
