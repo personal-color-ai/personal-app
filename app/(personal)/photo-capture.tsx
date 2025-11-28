@@ -1,20 +1,62 @@
-import { Camera, Upload, Lightbulb } from 'lucide-react-native';
+import { Camera, Upload, Lightbulb, X } from 'lucide-react-native';
 import { Button } from '@/components/nativewindui/Button';
-import { View, Text, ScrollView, Pressable } from 'react-native';
+import { View, Text, ScrollView, Pressable, StyleSheet, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+import { useState, useRef } from 'react';
 
 export default function PhotoCapture() {
   const router = useRouter();
+  const [showCamera, setShowCamera] = useState(false);
+  const [facing, setFacing] = useState<CameraType>('front');
+  const [permission, requestPermission] = useCameraPermissions();
+  const cameraRef = useRef<CameraView>(null);
 
-  const handleTakePhoto = () => {
+  const handleTakePhoto = async () => {
     console.log('사진 촬영');
-    // Navigate to photo preview with a placeholder
-    router.push({
-      pathname: '/(personal)/photo-preview',
-      params: { photoUri: 'placeholder' },
-    });
+
+    // Request camera permission
+    if (!permission) {
+      const result = await requestPermission();
+      if (!result.granted) {
+        alert('카메라 권한이 필요합니다.');
+        return;
+      }
+    } else if (!permission.granted) {
+      const result = await requestPermission();
+      if (!result.granted) {
+        alert('카메라 권한이 필요합니다.');
+        return;
+      }
+    }
+
+    // Show camera view
+    setShowCamera(true);
+  };
+
+  const handleCapture = async () => {
+    if (cameraRef.current) {
+      try {
+        const photo = await cameraRef.current.takePictureAsync();
+        console.log('사진 촬영 완료:', photo);
+        setShowCamera(false);
+
+        // Navigate to preview screen with photo URI
+        router.push({
+          pathname: '/(personal)/photo-preview',
+          params: { photoUri: photo?.uri || 'placeholder' },
+        });
+      } catch (error) {
+        console.error('사진 촬영 실패:', error);
+        alert('사진 촬영에 실패했습니다.');
+      }
+    }
+  };
+
+  const handleCancelCamera = () => {
+    setShowCamera(false);
   };
 
   const handleSelectFromGallery = async () => {
@@ -44,6 +86,51 @@ export default function PhotoCapture() {
       });
     }
   };
+
+  // Camera Modal
+  if (showCamera) {
+    return (
+      <Modal visible={showCamera} animationType="slide">
+        <SafeAreaView className="flex-1 bg-black">
+          <View className="flex-1 bg-black">
+            {/* Camera View */}
+            <View className="flex-1">
+              <CameraView ref={cameraRef} style={StyleSheet.absoluteFill} facing={facing}>
+                {/* Close button */}
+                <View className="absolute right-4 top-4 z-10">
+                  <Pressable
+                    onPress={handleCancelCamera}
+                    className="h-10 w-10 items-center justify-center rounded-full bg-black/50">
+                    <X size={24} color="#ffffff" />
+                  </Pressable>
+                </View>
+
+                {/* Guide circle */}
+                <View className="flex-1 items-center justify-center">
+                  <View
+                    className="rounded-full border-2 border-dashed border-white/50"
+                    style={{ width: 280, height: 280 }}
+                  />
+                </View>
+              </CameraView>
+            </View>
+
+            {/* Capture button */}
+            <View className="px-6 pb-8 pt-4">
+              <Button
+                onPress={handleCapture}
+                className="h-[58px] w-full rounded-[13px] bg-white active:bg-gray-100">
+                <View className="flex-row items-center justify-center gap-2">
+                  <Camera className="text-black" size={20} color="#000000" />
+                  <Text className="text-base font-medium text-black">사진 촬영</Text>
+                </View>
+              </Button>
+            </View>
+          </View>
+        </SafeAreaView>
+      </Modal>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-black">
