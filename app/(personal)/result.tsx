@@ -1,15 +1,30 @@
 import { View, Text, ScrollView, Pressable, Image } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Check } from 'lucide-react-native';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import OverviewTab from '@/components/result/OverviewTab';
 import FashionTab from '@/components/result/FashionTab';
 import BeautyTab from '@/components/result/BeautyTab';
+import { ReportResult } from '@/types/api';
 
 export default function Result() {
   const router = useRouter();
-  const { photoUri } = useLocalSearchParams<{ photoUri?: string }>();
+  const { photoUri, reportData } = useLocalSearchParams<{
+    photoUri?: string;
+    reportData?: string;
+  }>();
   const [selectedTab, setSelectedTab] = useState('overview');
+
+  // API 응답 데이터 파싱
+  const report = useMemo<ReportResult | null>(() => {
+    if (!reportData) return null;
+    try {
+      return JSON.parse(reportData as string);
+    } catch (error) {
+      console.error('Failed to parse report data:', error);
+      return null;
+    }
+  }, [reportData]);
 
   return (
     <View className="flex-1 bg-neutral-50">
@@ -106,9 +121,18 @@ export default function Result() {
           </View>
 
           {/* 탭 컨텐츠 */}
-          {selectedTab === 'overview' && <OverviewTab />}
-          {selectedTab === 'fashion' && <FashionTab />}
-          {selectedTab === 'beauty' && <BeautyTab />}
+          {selectedTab === 'overview' && (
+            <OverviewTab
+              colorInfo={report?.personalColorReportDto.color}
+              summary={report?.personalColorReportDto.summary.content}
+            />
+          )}
+          {selectedTab === 'fashion' && (
+            <FashionTab fashionInfo={report?.personalColorReportDto.fashion} />
+          )}
+          {selectedTab === 'beauty' && (
+            <BeautyTab beautyInfo={report?.personalColorReportDto.beauty} />
+          )}
         </View>
       </ScrollView>
     </View>

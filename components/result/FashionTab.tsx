@@ -1,6 +1,15 @@
 import { View, Text } from 'react-native';
+import { FashionInfo } from '@/types/api';
 
-export default function FashionTab() {
+interface FashionTabProps {
+  fashionInfo?: FashionInfo;
+}
+
+export default function FashionTab({ fashionInfo }: FashionTabProps) {
+  // 기본값 설정
+  const materials = fashionInfo?.recommendedMaterials || ['코튼', '린넨', '스웨이드', '니트'];
+  const patterns = fashionInfo?.recommendedPatterns || ['체크', '페이즐리', '스트라이프'];
+
   return (
     <View className="mt-[18px] px-[30px]">
       <View className="rounded-[12px] border border-neutral-200 bg-white p-[20px]">
@@ -9,32 +18,21 @@ export default function FashionTab() {
         {/* 추천 소재 */}
         <Text className="mb-[12px] text-[16px] font-semibold text-black">추천 소재</Text>
         <View className="mb-[28px] flex-row flex-wrap gap-[10px]">
-          <View className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
-            <Text className="text-[14px] font-semibold text-[#383745]">코튼</Text>
-          </View>
-          <View className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
-            <Text className="text-[14px] font-semibold text-[#383745]">린넨</Text>
-          </View>
-          <View className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
-            <Text className="text-[14px] font-semibold text-[#383745]">스웨이드</Text>
-          </View>
-          <View className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
-            <Text className="text-[14px] font-semibold text-[#383745]">니트</Text>
-          </View>
+          {materials.map((material, index) => (
+            <View key={index} className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
+              <Text className="text-[14px] font-semibold text-[#383745]">{material}</Text>
+            </View>
+          ))}
         </View>
 
         {/* 추천 패턴 */}
         <Text className="mb-[12px] text-[16px] font-semibold text-black">추천 패턴</Text>
         <View className="mb-[28px] flex-row flex-wrap gap-[10px]">
-          <View className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
-            <Text className="text-[14px] font-semibold text-[#383745]">체크</Text>
-          </View>
-          <View className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
-            <Text className="text-[14px] font-semibold text-[#383745]">페이즐리</Text>
-          </View>
-          <View className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
-            <Text className="text-[14px] font-semibold text-[#383745]">스트라이프</Text>
-          </View>
+          {patterns.map((pattern, index) => (
+            <View key={index} className="rounded-[10px] bg-[#edeef2] px-[9px] py-[4px]">
+              <Text className="text-[14px] font-semibold text-[#383745]">{pattern}</Text>
+            </View>
+          ))}
         </View>
 
         {/* 대비감 */}

@@ -1,8 +1,32 @@
 import { View, Text } from 'react-native';
+import { ColorInfo } from '@/types/api';
 
-export default function OverviewTab() {
+interface OverviewTabProps {
+  colorInfo?: ColorInfo;
+  summary?: string;
+}
+
+export default function OverviewTab({ colorInfo, summary }: OverviewTabProps) {
+  // 기본값 설정
+  const colorType = colorInfo?.colorType || '가을 웜뮤트';
+  const features = [
+    '따뜻한 언더톤의 피부',
+    '부드러운 인상',
+    '차분한 색감이 잘 어울림',
+    '자연스러운 메이크업 추천',
+  ];
+
   return (
     <>
+      {/* 요약 */}
+      {summary && (
+        <View className="mt-[18px] px-[30px]">
+          <View className="rounded-[12px] border border-neutral-200 bg-white p-[20px]">
+            <Text className="text-[16px] font-medium leading-[24px] text-[#475161]">{summary}</Text>
+          </View>
+        </View>
+      )}
+
       {/* 결과 카드 */}
       <View className="mt-[18px] px-[30px]">
         <View className="rounded-[12px] border border-[#fee685] bg-[#fff9ed] p-[20px]">
@@ -15,7 +39,7 @@ export default function OverviewTab() {
 
             {/* 텍스트 */}
             <View className="flex-1">
-              <Text className="mb-[8px] text-[20px] font-medium text-black">가을 웜뮤트</Text>
+              <Text className="mb-[8px] text-[20px] font-medium text-black">{colorType}</Text>
               <View className="flex-row gap-[12px]">
                 <View className="flex-row items-center gap-[5px]">
                   <Text className="text-[16px] font-medium text-[#4a5565]">명도</Text>
@@ -40,12 +64,7 @@ export default function OverviewTab() {
         <View className="rounded-[12px] border border-neutral-200 bg-white p-[20px]">
           <Text className="mb-[16px] text-[18px] font-semibold text-black">주요 특징</Text>
           <View className="gap-[9px]">
-            {[
-              '따뜻한 언더톤의 피부',
-              '따뜻한 언더톤의 피부',
-              '따뜻한 언더톤의 피부',
-              '따뜻한 언더톤의 피부',
-            ].map((text, index) => (
+            {features.map((text, index) => (
               <View key={index} className="flex-row items-center gap-[8px]">
                 <View className="h-[19px] w-[19px] items-center justify-center rounded-full bg-[#9810fa]">
                   <View className="h-[10px] w-[10px] rounded-full bg-white" />

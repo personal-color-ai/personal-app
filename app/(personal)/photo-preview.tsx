@@ -1,25 +1,62 @@
 import { RotateCcw } from 'lucide-react-native';
 import { Button } from '@/components/nativewindui/Button';
-import { View, Text, Image, Pressable } from 'react-native';
+import { View, Text, Image, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useState } from 'react';
+import { getPersonalColorReport } from '@/lib/api/reportService';
+import { ReportResult } from '@/types/api';
+import AnalysisLoading from '@/components/AnalysisLoading';
 
 export default function PhotoPreview() {
   const router = useRouter();
   const { photoUri } = useLocalSearchParams<{ photoUri: string }>();
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const handleRetake = () => {
     console.log('다시 촬영');
     router.back();
   };
 
-  const handleAnalyze = () => {
-    console.log('분석 시작');
-    router.push({
-      pathname: '/(personal)/result',
-      params: { photoUri: photoUri || 'placeholder' },
-    });
+  const handleAnalyze = async () => {
+    if (!photoUri || photoUri === 'placeholder') {
+      Alert.alert('오류', '사진을 먼저 촬영해주세요.');
+      return;
+    }
+
+    try {
+      setIsAnalyzing(true);
+      console.log('분석 시작');
+
+      // API 호출
+      const response = await getPersonalColorReport({
+        uri: photoUri,
+        name: 'photo.jpg',
+        type: 'image/jpeg',
+      });
+
+      console.log('분석 완료:', response.result);
+
+      // 결과 화면으로 이동
+      router.push({
+        pathname: '/(personal)/result',
+        params: {
+          photoUri: photoUri,
+          reportData: JSON.stringify(response.result),
+        },
+      });
+    } catch (error) {
+      console.error('분석 오류:', error);
+      Alert.alert('분석 실패', '퍼스널 컬러 분석에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
+
+  // 분석 중일 때 로딩 화면 표시
+  if (isAnalyzing) {
+    return <AnalysisLoading />;
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-black">
