@@ -1,12 +1,13 @@
-import { View, Text, ScrollView, Pressable, Image } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import { Check } from 'lucide-react-native';
-import { useState, useMemo, useEffect } from 'react';
-import OverviewTab from '@/components/result/OverviewTab';
-import FashionTab from '@/components/result/FashionTab';
 import BeautyTab from '@/components/result/BeautyTab';
-import { ReportResult, PersonalColor } from '@/types/api';
+import ExperimentalReportTab from '@/components/result/ExperimentalReportTab';
+import FashionTab from '@/components/result/FashionTab';
+import OverviewTab from '@/components/result/OverviewTab';
 import { savePersonalColor } from '@/lib/storage';
+import { PersonalColor, ReportResult } from '@/types/api';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Check } from 'lucide-react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 
 export default function Result() {
   const router = useRouter();
@@ -16,8 +17,6 @@ export default function Result() {
   }>();
   const [selectedTab, setSelectedTab] = useState('overview');
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
-
-  const [scrollY, setScrollY] = useState(0);
 
   // API 응답 데이터 파싱
   const report = useMemo<ReportResult | null>(() => {
@@ -71,12 +70,7 @@ export default function Result() {
 
   return (
     <View className="flex-1 bg-neutral-50">
-      <ScrollView
-        className="flex-1"
-        onScroll={(event) => {
-          setScrollY(event.nativeEvent.contentOffset.y);
-        }}
-        scrollEventThrottle={16}>
+      <ScrollView className="flex-1">
         <View className="pb-10">
           {/* 퍼스널 컬러 팔레트 섹션 */}
           <View className="mt-[21px] px-[30px]">
@@ -156,26 +150,34 @@ export default function Result() {
               <View className="flex-row gap-[4px]">
                 <Pressable
                   onPress={() => setSelectedTab('overview')}
-                  className={`flex-1 items-center rounded-[14px] px-[22px] py-[10px] ${selectedTab === 'overview' ? 'bg-[#9810fa]' : ''}`}>
+                  className={`flex-1 items-center rounded-[14px] px-[16px] py-[10px] ${selectedTab === 'overview' ? 'bg-[#9810fa]' : ''}`}>
                   <Text
-                    className={`text-[14px] font-bold ${selectedTab === 'overview' ? 'text-white' : 'text-black'}`}>
+                    className={`text-[13px] font-bold ${selectedTab === 'overview' ? 'text-white' : 'text-black'}`}>
                     개요
                   </Text>
                 </Pressable>
                 <Pressable
                   onPress={() => setSelectedTab('fashion')}
-                  className={`flex-1 items-center rounded-[14px] px-[22px] py-[10px] ${selectedTab === 'fashion' ? 'bg-[#9810fa]' : ''}`}>
+                  className={`flex-1 items-center rounded-[14px] px-[16px] py-[10px] ${selectedTab === 'fashion' ? 'bg-[#9810fa]' : ''}`}>
                   <Text
-                    className={`text-[14px] font-bold ${selectedTab === 'fashion' ? 'text-white' : 'text-black'}`}>
+                    className={`text-[13px] font-bold ${selectedTab === 'fashion' ? 'text-white' : 'text-black'}`}>
                     패션
                   </Text>
                 </Pressable>
                 <Pressable
                   onPress={() => setSelectedTab('beauty')}
-                  className={`flex-1 items-center rounded-[14px] px-[22px] py-[10px] ${selectedTab === 'beauty' ? 'bg-[#9810fa]' : ''}`}>
+                  className={`flex-1 items-center rounded-[14px] px-[16px] py-[10px] ${selectedTab === 'beauty' ? 'bg-[#9810fa]' : ''}`}>
                   <Text
-                    className={`text-[14px] font-bold ${selectedTab === 'beauty' ? 'text-white' : 'text-black'}`}>
+                    className={`text-[13px] font-bold ${selectedTab === 'beauty' ? 'text-white' : 'text-black'}`}>
                     뷰티
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => setSelectedTab('report')}
+                  className={`flex-1 items-center rounded-[14px] px-[16px] py-[10px] ${selectedTab === 'report' ? 'bg-[#9810fa]' : ''}`}>
+                  <Text
+                    className={`text-[13px] font-bold ${selectedTab === 'report' ? 'text-white' : 'text-black'}`}>
+                    보고서
                   </Text>
                 </Pressable>
               </View>
@@ -188,7 +190,6 @@ export default function Result() {
               colorInfo={report?.personalColorReportDto.color}
               summary={report?.personalColorReportDto.summary.content}
               analysisData={report?.personalColorResponse}
-              scrollY={scrollY}
             />
           )}
           {selectedTab === 'fashion' && (
@@ -196,6 +197,13 @@ export default function Result() {
           )}
           {selectedTab === 'beauty' && (
             <BeautyTab beautyInfo={report?.personalColorReportDto.beauty} />
+          )}
+          {selectedTab === 'report' && (
+            <ExperimentalReportTab
+              colorInfo={report?.personalColorReportDto.color}
+              summary={report?.personalColorReportDto.summary.content}
+              analysisData={report?.personalColorResponse}
+            />
           )}
         </View>
       </ScrollView>
