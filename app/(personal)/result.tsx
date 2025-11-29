@@ -1,11 +1,12 @@
 import { View, Text, ScrollView, Pressable, Image } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Check } from 'lucide-react-native';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import OverviewTab from '@/components/result/OverviewTab';
 import FashionTab from '@/components/result/FashionTab';
 import BeautyTab from '@/components/result/BeautyTab';
-import { ReportResult } from '@/types/api';
+import { ReportResult, PersonalColor } from '@/types/api';
+import { savePersonalColor } from '@/lib/storage';
 
 export default function Result() {
   const router = useRouter();
@@ -47,6 +48,26 @@ export default function Result() {
 
   // 첫 번째 베스트 컬러를 기본 선택
   const backgroundColor = selectedColor || bestColors[0];
+
+  // 퍼스널 컬러 결과를 AsyncStorage에 저장
+  useEffect(() => {
+    if (report?.personalColorResponse?.image?.result) {
+      const colorType = report.personalColorResponse.image.result;
+      // PersonalColorType을 PersonalColor enum으로 변환
+      const colorMap: Record<string, PersonalColor> = {
+        spring: PersonalColor.SPRING_WARM,
+        summer: PersonalColor.SUMMER_COOL,
+        autumn: PersonalColor.AUTUMN_WARM,
+        winter: PersonalColor.WINTER_COOL,
+      };
+      const personalColor = colorMap[colorType];
+      if (personalColor) {
+        savePersonalColor(personalColor).catch((error) =>
+          console.error('Failed to save personal color:', error)
+        );
+      }
+    }
+  }, [report]);
 
   return (
     <View className="flex-1 bg-neutral-50">

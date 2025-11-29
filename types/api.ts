@@ -72,3 +72,21 @@ export interface ResponseDto<T> {
 
 // 전체 리포트 응답 타입
 export type ReportResponse = ResponseDto<ReportResult>;
+
+// 제품 평가 관련 타입
+export enum PersonalColor {
+  SPRING_WARM = 'SPRING_WARM',
+  SUMMER_COOL = 'SUMMER_COOL',
+  AUTUMN_WARM = 'AUTUMN_WARM',
+  WINTER_COOL = 'WINTER_COOL',
+}
+
+export interface ProductEvaluationResponse {
+  suitable: boolean;
+  score: number;
+  reason: string;
+  colorAnalysis: string;
+  recommendation: string;
+}
+
+export type ProductEvaluationResult = ResponseDto<ProductEvaluationResponse>;

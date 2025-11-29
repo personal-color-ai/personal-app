@@ -1,11 +1,49 @@
 import { View, ScrollView, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 import { Icon } from '@/components/nativewindui/Icon';
 import { Text } from '@/components/nativewindui/Text';
+import { getPersonalColor } from '@/lib/storage';
+import { PersonalColor } from '@/types/api';
 
 export default function MyPageScreen() {
   const router = useRouter();
+  const [personalColor, setPersonalColor] = useState<PersonalColor | null>(null);
+
+  // 화면이 포커스될 때마다 퍼스널 컬러 다시 로드
+  useFocusEffect(
+    useCallback(() => {
+      loadPersonalColor();
+    }, [])
+  );
+
+  const loadPersonalColor = async () => {
+    const color = await getPersonalColor();
+    setPersonalColor(color);
+  };
+
+  const getColorKoreanName = (color: PersonalColor): string => {
+    const colorNames = {
+      [PersonalColor.SPRING_WARM]: '봄 웜톤',
+      [PersonalColor.SUMMER_COOL]: '여름 쿨톤',
+      [PersonalColor.AUTUMN_WARM]: '가을 웜톤',
+      [PersonalColor.WINTER_COOL]: '겨울 쿨톤',
+    };
+    return colorNames[color] || '';
+  };
+
+  const getColorEmoji = (color: PersonalColor): string => {
+    const colorEmojis = {
+      [PersonalColor.SPRING_WARM]: '🌸',
+      [PersonalColor.SUMMER_COOL]: '🌊',
+      [PersonalColor.AUTUMN_WARM]: '🍂',
+      [PersonalColor.WINTER_COOL]: '❄️',
+    };
+    return colorEmojis[color] || '🎨';
+  };
 
   return (
     <View className="flex-1 bg-white">
@@ -20,23 +58,44 @@ export default function MyPageScreen() {
             <View className="flex-1 gap-2">
               <Text className="text-[20px] font-bold text-[#0f0f0f]">김민준님</Text>
               <Text className="text-[14px] text-[#55606e]">가입일: 2024년 10월</Text>
-              <View className="flex-row items-center gap-1">
-                <Icon name="crown.fill" size={16} className="text-[#9810fa]" />
-                <Text className="text-[14px] font-medium text-[#9810fa]">프리미엄 사용자</Text>
-              </View>
+              {personalColor && (
+                <View className="flex-row items-center gap-1">
+                  <Text className="text-[16px]">{getColorEmoji(personalColor)}</Text>
+                  <Text className="text-[14px] font-medium text-[#9810fa]">
+                    {getColorKoreanName(personalColor)}
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
 
           {/* Personal Color CTA */}
-          <Pressable
-            onPress={() => router.push('/diagnosis')}
-            className="items-center gap-4 rounded-2xl border-2 border-dashed border-gray-300 bg-white p-6">
-            <Icon name="paintpalette" size={32} className="text-gray-400" />
-            <Text className="text-[14px] text-[#55606e]">퍼스널 컬러 진단을 받아보세요</Text>
-            <View className="rounded-lg bg-black px-6 py-2.5">
-              <Text className="text-[16px] font-medium text-white">진단 받기</Text>
-            </View>
-          </Pressable>
+          {personalColor ? (
+            <Pressable
+              onPress={() => router.push('/diagnosis')}
+              className="items-center gap-4 rounded-2xl border-2 border-[#9810fa] bg-purple-50 p-6">
+              <View className="flex-row items-center gap-2">
+                <Text className="text-[20px]">{getColorEmoji(personalColor)}</Text>
+                <Text className="text-[18px] font-bold text-[#9810fa]">
+                  {getColorKoreanName(personalColor)}
+                </Text>
+              </View>
+              <Text className="text-center text-[14px] text-[#55606e]">다시 진단받으시겠어요?</Text>
+              <View className="rounded-lg bg-[#9810fa] px-6 py-2.5">
+                <Text className="text-[16px] font-medium text-white">재진단 받기</Text>
+              </View>
+            </Pressable>
+          ) : (
+            <Pressable
+              onPress={() => router.push('/diagnosis')}
+              className="items-center gap-4 rounded-2xl border-2 border-dashed border-gray-300 bg-white p-6">
+              <Icon name="paintpalette" size={32} className="text-gray-400" />
+              <Text className="text-[14px] text-[#55606e]">퍼스널 컬러 진단을 받아보세요</Text>
+              <View className="rounded-lg bg-black px-6 py-2.5">
+                <Text className="text-[16px] font-medium text-white">진단 받기</Text>
+              </View>
+            </Pressable>
+          )}
 
           {/* Usage Statistics */}
           <View>
@@ -47,8 +106,10 @@ export default function MyPageScreen() {
                   <Icon name="chart.bar.fill" size={20} className="text-blue-500" />
                 </View>
                 <View className="items-center gap-1">
-                  <Text className="text-[24px] font-bold text-blue-500">4</Text>
-                  <Text className="text-[13px] text-[#55606e]">분석한 아이템</Text>
+                  <Text className="text-[24px] font-bold text-blue-500">
+                    {personalColor ? '1' : '0'}
+                  </Text>
+                  <Text className="text-[13px] text-[#55606e]">진단 횟수</Text>
                 </View>
               </View>
 
@@ -57,8 +118,10 @@ export default function MyPageScreen() {
                   <Icon name="star.fill" size={20} className="text-green-500" />
                 </View>
                 <View className="items-center gap-1">
-                  <Text className="text-[24px] font-bold text-green-500">89%</Text>
-                  <Text className="text-[13px] text-[#55606e]">평균 일치도</Text>
+                  <Text className="text-[24px] font-bold text-green-500">
+                    {personalColor ? '완료' : '-'}
+                  </Text>
+                  <Text className="text-[13px] text-[#55606e]">진단 상태</Text>
                 </View>
               </View>
 

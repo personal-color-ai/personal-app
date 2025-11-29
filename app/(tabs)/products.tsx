@@ -1,14 +1,18 @@
-import { View, ScrollView } from 'react-native';
-
-import { Icon } from '@/components/nativewindui/Icon';
-import { Text } from '@/components/nativewindui/Text';
+import { View } from 'react-native';
+import { WebView } from 'react-native-webview';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ProductsScreen() {
   return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <Icon name="bag" size={64} className="text-[#9810FA]" />
-      <Text className="mt-4 text-[24px] font-bold text-black">제품</Text>
-      <Text className="mt-2 text-[16px] text-[#777D87]">Coming Soon</Text>
-    </View>
+    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
+      <WebView
+        source={{ uri: 'https://personal-web-sooty-one.vercel.app/' }}
+        style={{ flex: 1 }}
+        startInLoadingState={true}
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
+        allowsInlineMediaPlayback={true}
+      />
+    </SafeAreaView>
   );
 }

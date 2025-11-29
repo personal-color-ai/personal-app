@@ -1,12 +1,9 @@
 import { CheckCircle2, XCircle, Camera, Sun, Smile } from 'lucide-react-native';
-import { ImageWithFallback } from '@/components/figma/ImageWithFallback';
 import { Button } from '@/components/nativewindui/Button';
 import { View, Text, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-
-// Placeholder for the missing asset
-const exampleImage = { uri: 'https://via.placeholder.com/400x300' };
 
 export default function PhotoGuide() {
   const router = useRouter();
@@ -82,37 +79,118 @@ export default function PhotoGuide() {
 
           {/* GOOD/BAD 예시 그리드 */}
           <View className="px-6 pb-6">
-            <View className="flex-row gap-4">
+            {/* 첫 번째 줄: 조명 */}
+            <View className="mb-4 flex-row gap-4">
               {/* GOOD 카드 */}
               <View className="flex-1 rounded-2xl border-2 border-green-200 bg-green-50 p-4">
-                <View className="relative mb-3 aspect-[4/3] overflow-hidden rounded-xl bg-white">
-                  <ImageWithFallback
-                    source={exampleImage}
-                    alt="Good example"
-                    className="h-full w-full"
-                    resizeMode="cover"
-                  />
-                  <View className="absolute right-2 top-2 rounded-full bg-white p-1">
-                    <CheckCircle2 className="text-green-500" size={20} color="#22c55e" />
+                <View className="relative mb-3 overflow-hidden rounded-xl">
+                  <LinearGradient
+                    colors={['#ffffff', '#f0fdf4']}
+                    style={{ aspectRatio: 3 / 4 }}
+                    className="items-center justify-center">
+                    <View className="h-full w-full items-center justify-center bg-gradient-to-b from-yellow-50 to-white p-4">
+                      <View className="items-center gap-3">
+                        <Sun size={48} color="#eab308" />
+                        <Text className="text-center text-sm font-medium text-gray-700">
+                          자연광{'\n'}밝고 균일한 조명
+                        </Text>
+                      </View>
+                    </View>
+                  </LinearGradient>
+                  <View className="absolute right-2 top-2 rounded-full bg-white p-1.5 shadow-md">
+                    <CheckCircle2 size={24} color="#22c55e" />
                   </View>
                 </View>
                 <View className="gap-1">
-                  <Text className="font-bold text-green-600">GOOD</Text>
-                  <Text className="text-sm text-gray-700">자연광, 화장X</Text>
+                  <Text className="text-base font-bold text-green-600">GOOD ✓</Text>
+                  <Text className="text-xs leading-4 text-gray-600">
+                    창가나 야외에서{'\n'}밝은 자연광
+                  </Text>
                 </View>
               </View>
 
               {/* BAD 카드 */}
               <View className="flex-1 rounded-2xl border-2 border-red-200 bg-red-50 p-4">
-                <View className="relative mb-3 flex aspect-[4/3] items-center justify-center rounded-xl bg-gray-200">
-                  <Camera className="text-gray-400" size={48} color="#9ca3af" />
-                  <View className="absolute right-2 top-2 rounded-full bg-white p-1">
-                    <XCircle className="text-red-500" size={20} color="#ef4444" />
+                <View className="relative mb-3 overflow-hidden rounded-xl">
+                  <LinearGradient
+                    colors={['#1f2937', '#111827']}
+                    style={{ aspectRatio: 3 / 4 }}
+                    className="items-center justify-center">
+                    <View className="h-full w-full items-center justify-center p-4">
+                      <View className="items-center gap-3">
+                        <Camera size={48} color="#6b7280" />
+                        <Text className="text-center text-sm font-medium text-gray-400">
+                          어두운 조명{'\n'}그림자 발생
+                        </Text>
+                      </View>
+                    </View>
+                  </LinearGradient>
+                  <View className="absolute right-2 top-2 rounded-full bg-white p-1.5 shadow-md">
+                    <XCircle size={24} color="#ef4444" />
                   </View>
                 </View>
                 <View className="gap-1">
-                  <Text className="font-bold text-red-600">BAD</Text>
-                  <Text className="text-sm text-gray-700">어두운 조명</Text>
+                  <Text className="text-base font-bold text-red-600">BAD ✗</Text>
+                  <Text className="text-xs leading-4 text-gray-600">실내 조명{'\n'}어두움</Text>
+                </View>
+              </View>
+            </View>
+
+            {/* 두 번째 줄: 화장 */}
+            <View className="flex-row gap-4">
+              {/* GOOD 카드 */}
+              <View className="flex-1 rounded-2xl border-2 border-green-200 bg-green-50 p-4">
+                <View className="relative mb-3 overflow-hidden rounded-xl">
+                  <LinearGradient
+                    colors={['#ffffff', '#f0f9ff']}
+                    style={{ aspectRatio: 3 / 4 }}
+                    className="items-center justify-center">
+                    <View className="h-full w-full items-center justify-center p-4">
+                      <View className="items-center gap-3">
+                        <Smile size={48} color="#3b82f6" />
+                        <Text className="text-center text-sm font-medium text-gray-700">
+                          맨얼굴{'\n'}자연스러운 피부
+                        </Text>
+                      </View>
+                    </View>
+                  </LinearGradient>
+                  <View className="absolute right-2 top-2 rounded-full bg-white p-1.5 shadow-md">
+                    <CheckCircle2 size={24} color="#22c55e" />
+                  </View>
+                </View>
+                <View className="gap-1">
+                  <Text className="text-base font-bold text-green-600">GOOD ✓</Text>
+                  <Text className="text-xs leading-4 text-gray-600">
+                    화장 없이{'\n'}자연 피부톤
+                  </Text>
+                </View>
+              </View>
+
+              {/* BAD 카드 */}
+              <View className="flex-1 rounded-2xl border-2 border-red-200 bg-red-50 p-4">
+                <View className="relative mb-3 overflow-hidden rounded-xl">
+                  <LinearGradient
+                    colors={['#fce7f3', '#fbcfe8']}
+                    style={{ aspectRatio: 3 / 4 }}
+                    className="items-center justify-center">
+                    <View className="h-full w-full items-center justify-center p-4">
+                      <View className="items-center gap-3">
+                        <Text className="text-5xl">💄</Text>
+                        <Text className="text-center text-sm font-medium text-gray-700">
+                          진한 메이크업{'\n'}색조 화장
+                        </Text>
+                      </View>
+                    </View>
+                  </LinearGradient>
+                  <View className="absolute right-2 top-2 rounded-full bg-white p-1.5 shadow-md">
+                    <XCircle size={24} color="#ef4444" />
+                  </View>
+                </View>
+                <View className="gap-1">
+                  <Text className="text-base font-bold text-red-600">BAD ✗</Text>
+                  <Text className="text-xs leading-4 text-gray-600">
+                    립스틱, 아이섀도{'\n'}진한 화장
+                  </Text>
                 </View>
               </View>
             </View>
