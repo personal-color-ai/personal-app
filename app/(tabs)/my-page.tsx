@@ -1,19 +1,109 @@
-import { View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { View, ScrollView, Pressable } from 'react-native';
+import { useRouter } from 'expo-router';
 
 import { Icon } from '@/components/nativewindui/Icon';
 import { Text } from '@/components/nativewindui/Text';
 
 export default function MyPageScreen() {
-  const insets = useSafeAreaInsets();
+  const router = useRouter();
 
   return (
-    <View
-      className="flex-1 items-center justify-center bg-white"
-      style={{ paddingTop: insets.top }}>
-      <Icon name="person.circle" size={64} className="text-[#9810FA]" />
-      <Text className="mt-4 text-[24px] font-bold text-black">마이페이지</Text>
-      <Text className="mt-2 text-[16px] text-[#777D87]">Coming Soon</Text>
+    <View className="flex-1 bg-white">
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        {/* Content */}
+        <View className="flex-1 gap-6 px-5 py-6">
+          {/* Profile Section */}
+          <View className="flex-row items-start gap-4">
+            <View className="h-16 w-16 items-center justify-center rounded-full bg-[#c084fc]">
+              <Icon name="person.fill" size={32} className="text-white" />
+            </View>
+            <View className="flex-1 gap-2">
+              <Text className="text-[20px] font-bold text-[#0f0f0f]">김민준님</Text>
+              <Text className="text-[14px] text-[#55606e]">가입일: 2024년 10월</Text>
+              <View className="flex-row items-center gap-1">
+                <Icon name="crown.fill" size={16} className="text-[#9810fa]" />
+                <Text className="text-[14px] font-medium text-[#9810fa]">프리미엄 사용자</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Personal Color CTA */}
+          <Pressable
+            onPress={() => router.push('/diagnosis')}
+            className="items-center gap-4 rounded-2xl border-2 border-dashed border-gray-300 bg-white p-6">
+            <Icon name="paintpalette" size={32} className="text-gray-400" />
+            <Text className="text-[14px] text-[#55606e]">퍼스널 컬러 진단을 받아보세요</Text>
+            <View className="rounded-lg bg-black px-6 py-2.5">
+              <Text className="text-[16px] font-medium text-white">진단 받기</Text>
+            </View>
+          </Pressable>
+
+          {/* Usage Statistics */}
+          <View>
+            <Text className="mb-4 text-[18px] font-bold text-[#0f0f0f]">이용 통계</Text>
+            <View className="flex-row gap-3">
+              <View className="flex-1 items-center gap-3 rounded-2xl border border-neutral-200 bg-white p-5">
+                <View className="h-10 w-10 items-center justify-center rounded-full bg-blue-50">
+                  <Icon name="chart.bar.fill" size={20} className="text-blue-500" />
+                </View>
+                <View className="items-center gap-1">
+                  <Text className="text-[24px] font-bold text-blue-500">4</Text>
+                  <Text className="text-[13px] text-[#55606e]">분석한 아이템</Text>
+                </View>
+              </View>
+
+              <View className="flex-1 items-center gap-3 rounded-2xl border border-neutral-200 bg-white p-5">
+                <View className="h-10 w-10 items-center justify-center rounded-full bg-green-50">
+                  <Icon name="star.fill" size={20} className="text-green-500" />
+                </View>
+                <View className="items-center gap-1">
+                  <Text className="text-[24px] font-bold text-green-500">89%</Text>
+                  <Text className="text-[13px] text-[#55606e]">평균 일치도</Text>
+                </View>
+              </View>
+
+              <View className="flex-1 items-center gap-3 rounded-2xl border border-neutral-200 bg-white p-5">
+                <View className="h-10 w-10 items-center justify-center rounded-full bg-purple-50">
+                  <Icon name="calendar" size={20} className="text-purple-500" />
+                </View>
+                <View className="items-center gap-1">
+                  <Text className="text-[24px] font-bold text-purple-500">7</Text>
+                  <Text className="text-[13px] text-[#55606e]">사용 일수</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Menu */}
+          <View>
+            <Text className="mb-4 text-[18px] font-bold text-[#0f0f0f]">메뉴</Text>
+            <View className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+              <Pressable className="flex-row items-center justify-between border-b border-neutral-200 px-5 py-4 active:bg-gray-50">
+                <View className="flex-row items-center gap-3">
+                  <View className="h-10 w-10 items-center justify-center rounded-full bg-purple-50">
+                    <Icon name="bell.fill" size={20} className="text-purple-500" />
+                  </View>
+                  <Text className="text-[16px] text-[#0f0f0f]">알림 설정</Text>
+                </View>
+                <Icon name="chevron.right" size={20} className="text-gray-400" />
+              </Pressable>
+
+              <Pressable className="flex-row items-center justify-between px-5 py-4 active:bg-gray-50">
+                <View className="flex-row items-center gap-3">
+                  <View className="h-10 w-10 items-center justify-center rounded-full bg-blue-50">
+                    <Icon name="questionmark.bubble.fill" size={20} className="text-blue-500" />
+                  </View>
+                  <Text className="text-[16px] text-[#0f0f0f]">도움말</Text>
+                </View>
+                <Icon name="chevron.right" size={20} className="text-gray-400" />
+              </Pressable>
+            </View>
+          </View>
+        </View>
+
+        {/* Bottom spacing for tab bar */}
+        <View className="h-24" />
+      </ScrollView>
     </View>
   );
 }

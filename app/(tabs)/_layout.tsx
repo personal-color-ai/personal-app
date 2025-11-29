@@ -11,9 +11,9 @@ export default function TabLayout() {
         tabBarInactiveTintColor: '#98A1AE',
         headerShown: false,
         tabBarStyle: {
-          height: Platform.OS === 'ios' ? 70 : 62,
-          paddingBottom: Platform.OS === 'ios' ? 20 : 8,
-          paddingTop: 8,
+          height: Platform.OS === 'ios' ? 80 : 72,
+          paddingBottom: Platform.OS === 'ios' ? 24 : 12,
+          paddingTop: 12,
           borderTopWidth: 1,
           borderTopColor: '#E0E0E0',
           backgroundColor: '#FFFFFF',
@@ -36,16 +36,35 @@ export default function TabLayout() {
         name="fitting-room"
         options={{
           title: '피팅룸',
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="camera" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <Icon name="archivebox" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="products"
+        options={{
+          title: '제품',
+          tabBarIcon: ({ color, size }) => <Icon name="bag" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="my-page"
         options={{
-          title: '마이페이지',
+          title: '마이',
           tabBarIcon: ({ color, size }) => <Icon name="person" size={size} color={color} />,
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#FFFFFF',
+          },
+          headerTitleStyle: {
+            fontFamily: 'Pretendard',
+            fontSize: 18,
+            fontWeight: '600',
+            color: '#0f0f0f',
+          },
+          headerShadowVisible: true,
+          headerRight: () => (
+            <Icon name="gearshape" size={24} color="#0f0f0f" style={{ marginRight: 16 }} />
+          ),
         }}
       />
     </Tabs>

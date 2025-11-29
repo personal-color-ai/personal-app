@@ -14,6 +14,9 @@ export default function Result() {
     reportData?: string;
   }>();
   const [selectedTab, setSelectedTab] = useState('overview');
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+
+  const [scrollY, setScrollY] = useState(0);
 
   // API 응답 데이터 파싱
   const report = useMemo<ReportResult | null>(() => {
@@ -26,9 +29,33 @@ export default function Result() {
     }
   }, [reportData]);
 
+  // 베스트 컬러와 피해야 할 컬러
+  const bestColors = report?.personalColorReportDto.color.bestColors || [
+    '#edb98d',
+    '#cd853f',
+    '#c19b6c',
+    '#b9966a',
+    '#deb988',
+  ];
+  const worstColors = report?.personalColorReportDto.color.worstColors || [
+    '#4a5568',
+    '#2d3748',
+    '#1a202c',
+    '#718096',
+    '#a0aec0',
+  ];
+
+  // 첫 번째 베스트 컬러를 기본 선택
+  const backgroundColor = selectedColor || bestColors[0];
+
   return (
     <View className="flex-1 bg-neutral-50">
-      <ScrollView className="flex-1">
+      <ScrollView
+        className="flex-1"
+        onScroll={(event) => {
+          setScrollY(event.nativeEvent.contentOffset.y);
+        }}
+        scrollEventThrottle={16}>
         <View className="pb-10">
           {/* 퍼스널 컬러 팔레트 섹션 */}
           <View className="mt-[21px] px-[30px]">
@@ -43,17 +70,22 @@ export default function Result() {
                 색상을 탭하여 확인해보세요
               </Text>
               <View className="flex-row gap-[15px]">
-                {/* 선택된 컬러 */}
-                <View className="relative">
-                  <View className="h-[45px] w-[45px] rounded-[12px] border-4 border-white bg-[#edb98d] shadow-md" />
-                  <View className="absolute left-[10px] top-[11px]">
-                    <Check size={24} color="white" />
-                  </View>
-                </View>
-                <View className="h-[45px] w-[45px] rounded-[12px] bg-[#cd853f]" />
-                <View className="h-[45px] w-[45px] rounded-[12px] bg-[#c19b6c]" />
-                <View className="h-[45px] w-[45px] rounded-[12px] bg-[#b9966a]" />
-                <View className="h-[45px] w-[45px] rounded-[12px] bg-[#deb988]" />
+                {bestColors.map((color, index) => (
+                  <Pressable
+                    key={`best-${index}`}
+                    onPress={() => setSelectedColor(color)}
+                    className="relative">
+                    <View
+                      className={`h-[45px] w-[45px] rounded-[12px] ${selectedColor === color ? 'border-4 border-white shadow-md' : ''}`}
+                      style={{ backgroundColor: color }}
+                    />
+                    {selectedColor === color && (
+                      <View className="absolute left-[10px] top-[11px]">
+                        <Check size={24} color="white" />
+                      </View>
+                    )}
+                  </Pressable>
+                ))}
               </View>
             </View>
 
@@ -64,26 +96,35 @@ export default function Result() {
                 색상을 탭하여 확인해보세요
               </Text>
               <View className="flex-row gap-[15px]">
-                <View className="h-[45px] w-[45px] rounded-[12px] bg-[#edb98d]" />
-                <View className="h-[45px] w-[45px] rounded-[12px] bg-[#cd853f]" />
-                <View className="h-[45px] w-[45px] rounded-[12px] bg-[#c19b6c]" />
-                <View className="h-[45px] w-[45px] rounded-[12px] bg-[#b9966a]" />
-                <View className="h-[45px] w-[45px] rounded-[12px] bg-[#deb988]" />
+                {worstColors.map((color, index) => (
+                  <Pressable
+                    key={`worst-${index}`}
+                    onPress={() => setSelectedColor(color)}
+                    className="relative">
+                    <View
+                      className={`h-[45px] w-[45px] rounded-[12px] ${selectedColor === color ? 'border-4 border-white shadow-md' : ''}`}
+                      style={{ backgroundColor: color }}
+                    />
+                    {selectedColor === color && (
+                      <View className="absolute left-[10px] top-[11px]">
+                        <Check size={24} color="white" />
+                      </View>
+                    )}
+                  </Pressable>
+                ))}
               </View>
             </View>
           </View>
 
           {/* 이미지 카드 */}
           <View className="mt-[25px] px-[30px]">
-            <View className="h-[275px] items-center justify-center overflow-hidden rounded-[12px] border border-neutral-200 bg-[#fff9ed]">
+            <View
+              className="h-[275px] items-center justify-center overflow-hidden rounded-[12px] border border-neutral-200"
+              style={{ backgroundColor }}>
               {photoUri ? (
-                <Image
-                  source={{ uri: photoUri }}
-                  className="h-[227px] w-[260px]"
-                  resizeMode="cover"
-                />
+                <Image source={{ uri: photoUri }} className="h-full w-full" resizeMode="cover" />
               ) : (
-                <View className="h-[227px] w-[260px] rounded-lg bg-gray-200" />
+                <View className="h-full w-full rounded-lg bg-gray-200" />
               )}
             </View>
           </View>
@@ -125,6 +166,8 @@ export default function Result() {
             <OverviewTab
               colorInfo={report?.personalColorReportDto.color}
               summary={report?.personalColorReportDto.summary.content}
+              analysisData={report?.personalColorResponse}
+              scrollY={scrollY}
             />
           )}
           {selectedTab === 'fashion' && (
