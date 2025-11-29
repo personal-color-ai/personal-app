@@ -2,7 +2,7 @@ import axios from 'axios';
 import Constants from 'expo-constants';
 
 // 환경 변수에서 API URL 가져오기
-const API_BASE_URL = Constants.expoConfig?.extra?.apiBaseUrl || 'http://168.107.53.130:8080';
+const API_BASE_URL = Constants.expoConfig?.extra?.apiBaseUrl;
 
 // axios 인스턴스 생성
 const apiClient = axios.create({
