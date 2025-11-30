@@ -231,20 +231,6 @@ export default function OverviewTab({ colorInfo, summary, analysisData }: Overvi
 
             <View className="flex-1">
               <Text className="mb-[8px] text-[20px] font-medium text-black">{colorType}</Text>
-              <View className="flex-row gap-[12px]">
-                <View className="flex-row items-center gap-[5px]">
-                  <Text className="text-[16px] font-medium text-[#4a5565]">명도</Text>
-                  <View className="rounded-[5px] bg-[#fef3c6] px-[9px] py-[2px]">
-                    <Text className="text-[14px] font-medium text-[#973b00]">medium</Text>
-                  </View>
-                </View>
-                <View className="flex-row items-center gap-[5px]">
-                  <Text className="text-[16px] font-medium text-[#4a5565]">채도</Text>
-                  <View className="rounded-[5px] bg-[#fef3c6] px-[9px] py-[2px]">
-                    <Text className="text-[14px] font-medium text-[#973b00]">muted</Text>
-                  </View>
-                </View>
-              </View>
             </View>
           </View>
         </View>

@@ -466,18 +466,6 @@ export default function ExperimentalReportTab({
           </LinearGradient>
         </View>
 
-        {/* 통계 카드 그리드 */}
-        <View className="mb-5 flex-row gap-3">
-          <StatCard
-            label="주요 계절"
-            value={colorInfo?.colorType.split(' ')[0] || '가을'}
-            color="#9810fa"
-            icon="🎨"
-          />
-          <StatCard label="명도" value="Medium" color="#f59e0b" icon="☀️" />
-          <StatCard label="채도" value="Muted" color="#10b981" icon="🎭" />
-        </View>
-
         {/* 계절별 적합도 - Bar Chart */}
         <View className="mb-5 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
           <View className="border-b border-gray-100 p-5 pb-4">
