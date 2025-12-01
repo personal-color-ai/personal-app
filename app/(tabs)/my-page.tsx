@@ -6,12 +6,13 @@ import { useCallback } from 'react';
 
 import { Icon } from '@/components/nativewindui/Icon';
 import { Text } from '@/components/nativewindui/Text';
-import { getPersonalColor } from '@/lib/storage';
+import { getPersonalColorReport } from '@/lib/storage';
 import { PersonalColor } from '@/types/api';
 
 export default function MyPageScreen() {
   const router = useRouter();
   const [personalColor, setPersonalColor] = useState<PersonalColor | null>(null);
+  const [colorTypeName, setColorTypeName] = useState<string>('');
 
   // 화면이 포커스될 때마다 퍼스널 컬러 다시 로드
   useFocusEffect(
@@ -21,8 +22,22 @@ export default function MyPageScreen() {
   );
 
   const loadPersonalColor = async () => {
-    const color = await getPersonalColor();
-    setPersonalColor(color);
+    const report = await getPersonalColorReport();
+    if (report?.personalColorReportDto?.color?.colorType) {
+      setColorTypeName(report.personalColorReportDto.color.colorType);
+
+      // enum 값도 설정 (기존 로직 호환성을 위해)
+      const colorType = report.personalColorResponse?.image?.result;
+      if (colorType) {
+        const colorMap: Record<string, PersonalColor> = {
+          spring: PersonalColor.SPRING_WARM,
+          summer: PersonalColor.SUMMER_COOL,
+          autumn: PersonalColor.AUTUMN_WARM,
+          winter: PersonalColor.WINTER_COOL,
+        };
+        setPersonalColor(colorMap[colorType]);
+      }
+    }
   };
 
   const getColorKoreanName = (color: PersonalColor): string => {
@@ -58,28 +73,18 @@ export default function MyPageScreen() {
             <View className="flex-1 gap-2">
               <Text className="text-[20px] font-bold text-[#0f0f0f]">김민준님</Text>
               <Text className="text-[14px] text-[#55606e]">가입일: 2024년 10월</Text>
-              {personalColor && (
-                <View className="flex-row items-center gap-1">
-                  <Text className="text-[16px]">{getColorEmoji(personalColor)}</Text>
-                  <Text className="text-[14px] font-medium text-[#9810fa]">
-                    {getColorKoreanName(personalColor)}
-                  </Text>
-                </View>
+              {colorTypeName && (
+                <Text className="text-[14px] font-medium text-[#9810fa]">{colorTypeName}</Text>
               )}
             </View>
           </View>
 
           {/* Personal Color CTA */}
-          {personalColor ? (
+          {colorTypeName ? (
             <Pressable
               onPress={() => router.push('/diagnosis')}
               className="items-center gap-4 rounded-2xl border-2 border-[#9810fa] bg-purple-50 p-6">
-              <View className="flex-row items-center gap-2">
-                <Text className="text-[20px]">{getColorEmoji(personalColor)}</Text>
-                <Text className="text-[18px] font-bold text-[#9810fa]">
-                  {getColorKoreanName(personalColor)}
-                </Text>
-              </View>
+              <Text className="text-[18px] font-bold text-[#9810fa]">{colorTypeName}</Text>
               <Text className="text-center text-[14px] text-[#55606e]">다시 진단받으시겠어요?</Text>
               <View className="rounded-lg bg-[#9810fa] px-6 py-2.5">
                 <Text className="text-[16px] font-medium text-white">재진단 받기</Text>
