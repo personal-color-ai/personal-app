@@ -353,22 +353,22 @@ export default function ExperimentalReportTab({
     data: analysisData
       ? [
           [
-            analysisData.image.probs.spring * 100,
-            analysisData.image.probs.summer * 100,
-            analysisData.image.probs.autumn * 100,
-            analysisData.image.probs.winter * 100,
+            Math.round(analysisData.image.probs.spring * 100),
+            Math.round(analysisData.image.probs.summer * 100),
+            Math.round(analysisData.image.probs.autumn * 100),
+            Math.round(analysisData.image.probs.winter * 100),
           ],
           [
-            analysisData.lip.probs.spring * 100,
-            analysisData.lip.probs.summer * 100,
-            analysisData.lip.probs.autumn * 100,
-            analysisData.lip.probs.winter * 100,
+            Math.round(analysisData.lip.probs.spring * 100),
+            Math.round(analysisData.lip.probs.summer * 100),
+            Math.round(analysisData.lip.probs.autumn * 100),
+            Math.round(analysisData.lip.probs.winter * 100),
           ],
           [
-            analysisData.eye.probs.spring * 100,
-            analysisData.eye.probs.summer * 100,
-            analysisData.eye.probs.autumn * 100,
-            analysisData.eye.probs.winter * 100,
+            Math.round(analysisData.eye.probs.spring * 100),
+            Math.round(analysisData.eye.probs.summer * 100),
+            Math.round(analysisData.eye.probs.autumn * 100),
+            Math.round(analysisData.eye.probs.winter * 100),
           ],
         ]
       : [
@@ -561,6 +561,7 @@ export default function ExperimentalReportTab({
               chartConfig={chartConfig}
               style={{ borderRadius: 16 }}
               hideLegend={false}
+              formatYLabel={(value) => Math.round(Number(value)).toString()}
             />
           </View>
         </View>
