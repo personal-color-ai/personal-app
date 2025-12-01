@@ -439,28 +439,30 @@ export default function ExperimentalReportTab({
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             className="p-8">
-            <View className="mb-4 flex-row items-center gap-2">
-              <Sparkles size={20} color="#9810fa" />
-              <Text className="text-lg font-bold text-gray-900">Executive Summary</Text>
-            </View>
+            <View className="p-4">
+              <View className="mb-4 flex-row items-center gap-2">
+                <Sparkles size={20} color="#9810fa" />
+                <Text className="text-lg font-bold text-gray-900">Executive Summary</Text>
+              </View>
 
-            <Text className="mb-2 text-xl font-bold text-gray-800">
-              {colorInfo?.colorType || '가을 웜뮤트'}
-            </Text>
-            <Text className="mb-4 text-sm leading-6 text-gray-600">
-              {summary || '따뜻한 톤의 색상이 가장 잘 어울리는 타입입니다.'}
-            </Text>
-            <View className="flex-row flex-wrap gap-2">
-              <View className="rounded-full bg-white/90 px-3 py-1.5 shadow-sm">
-                <Text className="text-xs font-bold text-purple-700">최고 {maxScore}%</Text>
-              </View>
-              <View className="rounded-full bg-white/90 px-3 py-1.5 shadow-sm">
-                <Text className="text-xs font-bold text-purple-700">
-                  평균 {avgScore.toFixed(1)}%
-                </Text>
-              </View>
-              <View className="rounded-full bg-white/90 px-3 py-1.5 shadow-sm">
-                <Text className="text-xs font-bold text-purple-700">최저 {minScore}%</Text>
+              <Text className="mb-2 text-xl font-bold text-gray-800">
+                {colorInfo?.colorType || '가을 웜뮤트'}
+              </Text>
+              <Text className="mb-4 text-sm leading-6 text-gray-600">
+                {summary || '따뜻한 톤의 색상이 가장 잘 어울리는 타입입니다.'}
+              </Text>
+              <View className="flex-row flex-wrap gap-2">
+                <View className="rounded-full bg-white/90 px-3 py-1.5 shadow-sm">
+                  <Text className="text-xs font-bold text-purple-700">최고 {maxScore}%</Text>
+                </View>
+                <View className="rounded-full bg-white/90 px-3 py-1.5 shadow-sm">
+                  <Text className="text-xs font-bold text-purple-700">
+                    평균 {avgScore.toFixed(1)}%
+                  </Text>
+                </View>
+                <View className="rounded-full bg-white/90 px-3 py-1.5 shadow-sm">
+                  <Text className="text-xs font-bold text-purple-700">최저 {minScore}%</Text>
+                </View>
               </View>
             </View>
           </LinearGradient>

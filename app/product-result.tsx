@@ -36,9 +36,9 @@ export default function ProductResultScreen() {
   };
 
   const getGradientColors = (score: number) => {
-    if (score >= 80) return ['#10b981', '#059669', '#047857'];
-    if (score >= 60) return ['#f59e0b', '#d97706', '#b45309'];
-    return ['#ef4444', '#dc2626', '#b91c1c'];
+    if (score >= 80) return ['#10b981', '#059669', '#047857'] as const;
+    if (score >= 60) return ['#f59e0b', '#d97706', '#b45309'] as const;
+    return ['#ef4444', '#dc2626', '#b91c1c'] as const;
   };
 
   return (

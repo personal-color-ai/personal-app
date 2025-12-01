@@ -41,22 +41,22 @@ export default function Result() {
 
   // 베스트 컬러와 피해야 할 컬러
   const bestColors = report?.personalColorReportDto.color.bestColors || [
-    '#edb98d',
-    '#cd853f',
-    '#c19b6c',
-    '#b9966a',
-    '#deb988',
+    { name: '따뜻한 베이지', hex: '#edb98d' },
+    { name: '골든 브라운', hex: '#cd853f' },
+    { name: '카키', hex: '#c19b6c' },
+    { name: '샌드', hex: '#b9966a' },
+    { name: '페일 골드', hex: '#deb988' },
   ];
   const worstColors = report?.personalColorReportDto.color.worstColors || [
-    '#4a5568',
-    '#2d3748',
-    '#1a202c',
-    '#718096',
-    '#a0aec0',
+    { name: '차가운 그레이', hex: '#4a5568' },
+    { name: '다크 그레이', hex: '#2d3748' },
+    { name: '블랙', hex: '#1a202c' },
+    { name: '스틸 그레이', hex: '#718096' },
+    { name: '라이트 그레이', hex: '#a0aec0' },
   ];
 
   // 첫 번째 베스트 컬러를 기본 선택
-  const backgroundColor = selectedColor || bestColors[0];
+  const backgroundColor = selectedColor || bestColors[0].hex;
 
   // 퍼스널 컬러 결과를 AsyncStorage에 저장
   useEffect(() => {
@@ -130,13 +130,13 @@ export default function Result() {
                 {bestColors.map((color, index) => (
                   <Pressable
                     key={`best-${index}`}
-                    onPress={() => setSelectedColor(color)}
+                    onPress={() => setSelectedColor(color.hex)}
                     className="relative">
                     <View
-                      className={`h-[45px] w-[45px] rounded-[12px] ${selectedColor === color ? 'border-4 border-white shadow-md' : ''}`}
-                      style={{ backgroundColor: color }}
+                      className={`h-[45px] w-[45px] rounded-[12px] ${selectedColor === color.hex ? 'border-4 border-white shadow-md' : ''}`}
+                      style={{ backgroundColor: color.hex }}
                     />
-                    {selectedColor === color && (
+                    {selectedColor === color.hex && (
                       <View className="absolute left-[10px] top-[11px]">
                         <Check size={24} color="white" />
                       </View>
@@ -156,13 +156,13 @@ export default function Result() {
                 {worstColors.map((color, index) => (
                   <Pressable
                     key={`worst-${index}`}
-                    onPress={() => setSelectedColor(color)}
+                    onPress={() => setSelectedColor(color.hex)}
                     className="relative">
                     <View
-                      className={`h-[45px] w-[45px] rounded-[12px] ${selectedColor === color ? 'border-4 border-white shadow-md' : ''}`}
-                      style={{ backgroundColor: color }}
+                      className={`h-[45px] w-[45px] rounded-[12px] ${selectedColor === color.hex ? 'border-4 border-white shadow-md' : ''}`}
+                      style={{ backgroundColor: color.hex }}
                     />
-                    {selectedColor === color && (
+                    {selectedColor === color.hex && (
                       <View className="absolute left-[10px] top-[11px]">
                         <Check size={24} color="white" />
                       </View>
@@ -192,8 +192,6 @@ export default function Result() {
                   height: 240,
                   borderRadius: 120,
                   overflow: 'hidden',
-                  borderWidth: 3,
-                  borderColor: 'white',
                   shadowColor: '#000',
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.25,
