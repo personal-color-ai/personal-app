@@ -28,11 +28,17 @@ export interface Summary {
   content: string;
 }
 
+// 컬러 아이템
+export interface ColorItem {
+  name: string;
+  hex: string;
+}
+
 // 컬러 정보
 export interface ColorInfo {
   colorType: string;
-  bestColors: string[];
-  worstColors: string[];
+  bestColors: ColorItem[];
+  worstColors: ColorItem[];
 }
 
 // 패션 정보
@@ -43,9 +49,9 @@ export interface FashionInfo {
 
 // 뷰티 정보
 export interface BeautyInfo {
-  lipColors: string[];
-  eyeShadows: string[];
-  hairColors: string[];
+  lipColors: ColorItem[];
+  eyeShadows: ColorItem[];
+  hairColors: ColorItem[];
   jewelry: string[];
 }
 

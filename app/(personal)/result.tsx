@@ -8,6 +8,8 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Check } from 'lucide-react-native';
 import { useEffect, useMemo, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
+import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
 export default function Result() {
   const router = useRouter();
@@ -17,6 +19,14 @@ export default function Result() {
   }>();
   const [selectedTab, setSelectedTab] = useState('overview');
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
+
+  // Shared values for gestures
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
+  const scale = useSharedValue(1);
+  const startX = useSharedValue(0);
+  const startY = useSharedValue(0);
+  const startScale = useSharedValue(1);
 
   // API 응답 데이터 파싱
   const report = useMemo<ReportResult | null>(() => {
@@ -67,6 +77,38 @@ export default function Result() {
       }
     }
   }, [report]);
+
+  // Pan gesture for dragging
+  const panGesture = Gesture.Pan()
+    .onStart(() => {
+      startX.value = translateX.value;
+      startY.value = translateY.value;
+    })
+    .onUpdate((event) => {
+      translateX.value = startX.value + event.translationX;
+      translateY.value = startY.value + event.translationY;
+    });
+
+  // Pinch gesture for zooming
+  const pinchGesture = Gesture.Pinch()
+    .onStart(() => {
+      startScale.value = scale.value;
+    })
+    .onUpdate((event) => {
+      scale.value = Math.max(0.5, Math.min(startScale.value * event.scale, 3));
+    });
+
+  // Combine gestures
+  const composedGesture = Gesture.Simultaneous(panGesture, pinchGesture);
+
+  // Animated style
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: translateX.value },
+      { translateY: translateY.value },
+      { scale: scale.value },
+    ],
+  }));
 
   return (
     <View className="flex-1 bg-neutral-50">
@@ -131,16 +173,47 @@ export default function Result() {
             </View>
           </View>
 
-          {/* 이미지 카드 */}
+          {/* 이미지 카드 with circular mask */}
           <View className="mt-[25px] px-[30px]">
             <View
-              className="h-[275px] items-center justify-center overflow-hidden rounded-[12px] border border-neutral-200"
-              style={{ backgroundColor }}>
-              {photoUri ? (
-                <Image source={{ uri: photoUri }} className="h-full w-full" resizeMode="cover" />
-              ) : (
-                <View className="h-full w-full rounded-lg bg-gray-200" />
-              )}
+              className="items-center justify-center overflow-hidden rounded-[12px] border border-neutral-200"
+              style={{ backgroundColor, height: 350 }}>
+              {/* Instruction text */}
+              <View className="absolute left-0 right-0 top-3 z-10">
+                <Text className="text-center text-xs text-gray-600">
+                  드래그로 이동, 핀치로 확대/축소
+                </Text>
+              </View>
+
+              {/* Circular mask container */}
+              <View
+                style={{
+                  width: 240,
+                  height: 240,
+                  borderRadius: 120,
+                  overflow: 'hidden',
+                  borderWidth: 3,
+                  borderColor: 'white',
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 6,
+                  elevation: 5,
+                }}>
+                {photoUri ? (
+                  <GestureDetector gesture={composedGesture}>
+                    <Animated.View style={[{ width: 240, height: 240 }, animatedStyle]}>
+                      <Image
+                        source={{ uri: photoUri }}
+                        style={{ width: 240, height: 240 }}
+                        resizeMode="cover"
+                      />
+                    </Animated.View>
+                  </GestureDetector>
+                ) : (
+                  <View className="h-full w-full rounded-lg bg-gray-200" />
+                )}
+              </View>
             </View>
           </View>
 

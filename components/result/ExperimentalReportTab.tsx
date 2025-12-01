@@ -598,17 +598,23 @@ export default function ExperimentalReportTab({
         <View className="mb-5 overflow-hidden rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
           <Text className="mb-4 text-lg font-bold text-gray-900">추천 색상 팔레트</Text>
           <View className="flex-row flex-wrap justify-between gap-3">
-            {(colorInfo?.bestColors || ['#edb98d', '#cd853f', '#c19b6c', '#b9966a', '#deb988']).map(
-              (color, index) => (
-                <View key={index} className="items-center">
-                  <View
-                    className="mb-2 h-16 w-16 rounded-2xl border-2 border-white shadow-lg"
-                    style={{ backgroundColor: color }}
-                  />
-                  <Text className="text-xs font-medium text-gray-600">#{index + 1}</Text>
-                </View>
-              )
-            )}
+            {(
+              colorInfo?.bestColors || [
+                { name: '따뜻한 베이지', hex: '#edb98d' },
+                { name: '골든 브라운', hex: '#cd853f' },
+                { name: '카키', hex: '#c19b6c' },
+                { name: '샌드', hex: '#b9966a' },
+                { name: '페일 골드', hex: '#deb988' },
+              ]
+            ).map((color, index) => (
+              <View key={index} className="items-center">
+                <View
+                  className="mb-2 h-16 w-16 rounded-2xl border-2 border-white shadow-lg"
+                  style={{ backgroundColor: color.hex }}
+                />
+                <Text className="text-xs font-medium text-gray-600">#{index + 1}</Text>
+              </View>
+            ))}
           </View>
         </View>
 

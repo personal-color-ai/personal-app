@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { PersonalColor } from '@/types/api';
+import { PersonalColor, ReportResult } from '@/types/api';
 
 const PERSONAL_COLOR_KEY = '@personal_color';
+const PERSONAL_COLOR_REPORT_KEY = '@personal_color_report';
 
 /**
  * 퍼스널 컬러 저장
@@ -37,5 +38,30 @@ export const clearPersonalColor = async (): Promise<void> => {
   } catch (error) {
     console.error('Failed to clear personal color:', error);
     throw error;
+  }
+};
+
+/**
+ * 퍼스널 컬러 리포트 저장
+ */
+export const savePersonalColorReport = async (report: ReportResult): Promise<void> => {
+  try {
+    await AsyncStorage.setItem(PERSONAL_COLOR_REPORT_KEY, JSON.stringify(report));
+  } catch (error) {
+    console.error('Failed to save personal color report:', error);
+    throw error;
+  }
+};
+
+/**
+ * 퍼스널 컬러 리포트 불러오기
+ */
+export const getPersonalColorReport = async (): Promise<ReportResult | null> => {
+  try {
+    const report = await AsyncStorage.getItem(PERSONAL_COLOR_REPORT_KEY);
+    return report ? JSON.parse(report) : null;
+  } catch (error) {
+    console.error('Failed to get personal color report:', error);
+    return null;
   }
 };
