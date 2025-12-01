@@ -11,7 +11,7 @@ import { Icon } from '@/components/nativewindui/Icon';
 import { Text } from '@/components/nativewindui/Text';
 import { Button } from '@/components/nativewindui/Button';
 import { evaluateProduct } from '@/lib/api/productService';
-import { getPersonalColor } from '@/lib/storage';
+import { getPersonalColorReport } from '@/lib/storage';
 import { PersonalColor } from '@/types/api';
 
 export default function FittingRoom() {
@@ -28,9 +28,19 @@ export default function FittingRoom() {
   );
 
   const loadPersonalColor = async () => {
-    const color = await getPersonalColor();
-    console.log('Loaded personal color:', color);
-    setPersonalColor(color);
+    const report = await getPersonalColorReport();
+    if (report?.personalColorResponse?.image?.result) {
+      const colorType = report.personalColorResponse.image.result;
+      const colorMap: Record<string, PersonalColor> = {
+        spring: PersonalColor.SPRING_WARM,
+        summer: PersonalColor.SUMMER_COOL,
+        autumn: PersonalColor.AUTUMN_WARM,
+        winter: PersonalColor.WINTER_COOL,
+      };
+      const color = colorMap[colorType];
+      console.log('Loaded personal color from report:', colorType, '→', color);
+      setPersonalColor(color);
+    }
   };
 
   const pickImage = async () => {
@@ -81,7 +91,18 @@ export default function FittingRoom() {
         type: 'image/jpeg',
       };
 
+      console.log('=== Sending Product Evaluation Request ===');
+      console.log('Personal Color:', personalColor);
+      console.log('Image URI:', selectedImage);
+
       const response = await evaluateProduct(imageFile, personalColor);
+
+      // API 응답 확인용 로그
+      console.log('=== Product Evaluation Response ===');
+      console.log('Score:', response.result.score);
+      console.log('Suitable:', response.result.suitable);
+      console.log('Reason:', response.result.reason);
+      console.log('Full response:', JSON.stringify(response, null, 2));
 
       // Navigate to result page
       router.push({
@@ -94,9 +115,41 @@ export default function FittingRoom() {
 
       // Reset state
       setSelectedImage(null);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Product evaluation error:', error);
-      Alert.alert('오류', '제품 평가 중 오류가 발생했습니다.');
+
+      // 에러 타입에 따라 다른 메시지 표시
+      let errorTitle = '평가 실패';
+      let errorMessage = '제품 평가 중 오류가 발생했습니다.';
+
+      if (error.response) {
+        // 서버 응답이 있는 경우
+        const status = error.response.status;
+
+        if (status === 500) {
+          errorTitle = '서버 오류';
+          errorMessage = '서버에서 일시적인 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.';
+        } else if (status === 400) {
+          errorTitle = '잘못된 요청';
+          errorMessage = '이미지를 인식할 수 없습니다.\n다른 사진으로 다시 시도해주세요.';
+        } else if (status === 401 || status === 403) {
+          errorTitle = '인증 오류';
+          errorMessage = '인증에 문제가 있습니다.\n앱을 다시 시작해주세요.';
+        } else {
+          errorMessage = `오류가 발생했습니다. (코드: ${status})\n잠시 후 다시 시도해주세요.`;
+        }
+      } else if (error.request) {
+        // 요청은 보냈지만 응답이 없는 경우
+        errorTitle = '네트워크 오류';
+        errorMessage = '인터넷 연결을 확인하고\n다시 시도해주세요.';
+      }
+
+      Alert.alert(errorTitle, errorMessage, [
+        {
+          text: '확인',
+          style: 'default',
+        },
+      ]);
     } finally {
       setLoading(false);
     }
